@@ -6,8 +6,8 @@ try { data = JSON.parse(localStorage.getItem(KUNCI)) || []; } catch (e) { data =
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist();
 
 const simpanData = () => localStorage.setItem(KUNCI, JSON.stringify(data));
-const tglLokal = (tambah = 0) => {
-  const d = new Date(); d.setDate(d.getDate() + tambah);
+const tglLokal = () => {
+  const d = new Date();
   return new Date(d - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
 };
 const jamDari = ms => new Date(ms).toTimeString().slice(0, 5);
@@ -70,8 +70,6 @@ $('simpan').onclick = () => {
 };
 $('batal').onclick = () => { kosongkanForm(); tampil(); };
 $('tanggal').onchange = tampil;
-$('hariIni').onclick = () => { $('tanggal').value = tglLokal(0); tampil(); };
-$('besok').onclick = () => { $('tanggal').value = tglLokal(1); tampil(); };
 
 $('daftar').onclick = e => {
   const { ubah, hapus, selesai } = e.target.dataset;
@@ -95,7 +93,7 @@ $('daftar').onclick = e => {
   }
 };
 
-$('tanggal').value = tglLokal(0);
+$('tanggal').value = tglLokal();
 tampil();
 setInterval(tampil, 20000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) tampil(); });
