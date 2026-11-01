@@ -1,4 +1,4 @@
-:root { --teal:#0f766e; --bg:#f4f7f6; --ink:#14201e; --muted:#5b6b68; --line:#d9e2df; --card:#fff; }
+:root { --teal:#0f766e; --bg:#f4f7f6; --ink:#14201e; --muted:#5b6b68; --line:#d9e2df; --card:#fff; color-scheme: light; }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--ink); }
@@ -21,12 +21,17 @@ textarea { min-height:72px; }
 #daftar { list-style:none; margin:0; padding:0; }
 #daftar li { display:flex; gap:12px; padding:12px 0; border-top:1px solid var(--line); }
 #daftar li:first-child { border-top:0; }
+#daftar li.berlangsung { box-shadow: inset 3px 0 0 var(--teal); padding-left:12px; }
+#daftar li.selesai .isi b { text-decoration:line-through; opacity:.6; }
 .no { flex:none; width:28px; height:28px; border-radius:50%; background:var(--teal); color:#fff; display:grid; place-content:center; font-size:.85rem; }
 .isi { flex:1; min-width:0; }
 .isi b { display:block; }
 .isi small { display:block; color:var(--muted); margin-top:2px; }
-.aksi { display:flex; gap:8px; margin-top:8px; }
+.isi small.st { font-size:.82rem; }
+.isi small.st.berlangsung { color:var(--teal); font-weight:600; }
+.aksi { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
 .aksi button { border:1px solid var(--line); background:#fff; border-radius:8px; padding:6px 12px; font:inherit; font-size:.85rem; }
+.aksi button.utama { background:var(--teal); border-color:var(--teal); color:#fff; }
 nav { position:fixed; left:0; right:0; bottom:0; display:flex; background:var(--card); border-top:1px solid var(--line); padding-bottom:env(safe-area-inset-bottom); }
 nav button { flex:1; border:0; background:none; padding:14px 0; font:inherit; color:var(--muted); border-top:3px solid transparent; }
 nav button[aria-current="true"] { color:var(--teal); font-weight:600; border-top-color:var(--teal); }
