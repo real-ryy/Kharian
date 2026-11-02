@@ -19,6 +19,7 @@
       <label>Tanggal<input type="date" id="tanggal"></label>
       <label>Jam mulai<input type="time" id="jam"></label>
       <label>Jam selesai (opsional)<input type="time" id="jamSelesai"></label>
+      <label><input type="checkbox" id="alarm" checked style="display:inline;width:auto;margin:0 8px 0 0">Alarm bunyi dan getar saat mulai dan selesai</label>
       <button class="btn" id="simpan">Simpan catatan</button>
       <button class="btn pucat" id="batal" hidden>Batal</button>
     </div>
@@ -26,6 +27,14 @@
       <h2>Sesi</h2>
       <p class="kosong" id="sesiInfo"></p>
       <ol id="daftar"></ol>
+    </div>
+    <div class="box">
+      <h2>Alarm</h2>
+      <p class="kosong" id="alarmInfo">Ketuk Izinkan alarm, lalu Tes alarm.</p>
+      <div class="aksi">
+        <button class="utama" id="izinAlarm">Izinkan alarm</button>
+        <button id="tesAlarm">Tes alarm 1 menit</button>
+      </div>
     </div>
   </section>
   <section id="hasil" class="screen" hidden>
@@ -47,6 +56,7 @@
   <button data-go="hasil" aria-current="false">Hasil</button>
   <button data-go="ai" aria-current="false">AI</button>
 </nav>
+<script src="alarm.js"></script>
 <script src="catatan.js"></script>
 <script>
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
@@ -59,7 +69,8 @@
   const chips = document.querySelectorAll('#periode button');
   chips.forEach(c => c.onclick = () => chips.forEach(b => b.setAttribute('aria-pressed', b === c)));
   document.getElementById('mode').textContent =
-    matchMedia('(display-mode: standalone)').matches ? 'terpasang' : 'browser';
+    (window.Capacitor && Capacitor.isNativePlatform && Capacitor.isNativePlatform()) ? 'aplikasi'
+    : matchMedia('(display-mode: standalone)').matches ? 'terpasang' : 'browser';
 </script>
 </body>
 </html>
