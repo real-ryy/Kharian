@@ -5,7 +5,7 @@ let data = [], editId = null;
 try { data = JSON.parse(localStorage.getItem(KUNCI)) || []; } catch (e) { data = []; }
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist();
 
-const simpanData = () => localStorage.setItem(KUNCI, JSON.stringify(data));
+const simpanData = () => { localStorage.setItem(KUNCI, JSON.stringify(data)); Alarm.sinkron(data); };
 const tglLokal = () => {
   const d = new Date();
   return new Date(d - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
@@ -29,8 +29,9 @@ function statusDari(c) {
 }
 
 function ket(c, s) {
-  if (s === 'belum') return `Mulai otomatis pukul ${c.jam}` + (c.akhir ? `, selesai ${jamDari(c.akhir)}` : '');
-  if (s === 'berlangsung') return `Sedang berlangsung sejak ${c.jam}` + (c.akhir ? `, selesai otomatis ${jamDari(c.akhir)}` : ', belum ada jam selesai');
+  const mati = c.alarm === false ? ' (tanpa alarm)' : '';
+  if (s === 'belum') return `Mulai otomatis pukul ${c.jam}` + (c.akhir ? `, selesai ${jamDari(c.akhir)}` : '') + mati;
+  if (s === 'berlangsung') return `Sedang berlangsung sejak ${c.jam}` + (c.akhir ? `, selesai otomatis ${jamDari(c.akhir)}` : ', belum ada jam selesai') + mati;
   return `Selesai: ${c.jam} sampai ${jamDari(c.akhir)}`;
 }
 
@@ -52,6 +53,7 @@ function tampil() {
 function kosongkanForm() {
   editId = null;
   ['nama', 'info', 'jam', 'jamSelesai'].forEach(k => $(k).value = '');
+  $('alarm').checked = true;
   $('judulForm').textContent = 'Catatan baru';
   $('simpan').textContent = 'Simpan catatan';
   $('batal').hidden = true;
@@ -61,7 +63,7 @@ $('simpan').onclick = () => {
   const nama = $('nama').value.trim(), tanggal = $('tanggal').value, jam = $('jam').value, jamS = $('jamSelesai').value;
   if (!nama || !tanggal || !jam) return alert('Isi nama kegiatan, tanggal, dan jam mulai dulu.');
   const lama = editId && data.find(c => c.id === editId);
-  const isi = { nama, info: $('info').value.trim(), tanggal, jam };
+  const isi = { nama, info: $('info').value.trim(), tanggal, jam, alarm: $('alarm').checked };
   // Jam selesai yang tidak diubah tetap memakai waktu aslinya (misalnya dari tombol Selesai).
   isi.akhir = lama && lama.akhir && jamS === jamDari(lama.akhir) && tanggal === lama.tanggal && jam === lama.jam
     ? lama.akhir : hitungAkhir(tanggal, jam, jamS);
@@ -82,6 +84,7 @@ $('daftar').onclick = e => {
     editId = c.id;
     $('nama').value = c.nama; $('info').value = c.info; $('tanggal').value = c.tanggal;
     $('jam').value = c.jam; $('jamSelesai').value = c.akhir ? jamDari(c.akhir) : '';
+    $('alarm').checked = c.alarm !== false;
     $('judulForm').textContent = 'Ubah catatan';
     $('simpan').textContent = 'Simpan perubahan';
     $('batal').hidden = false;
@@ -93,7 +96,11 @@ $('daftar').onclick = e => {
   }
 };
 
+$('izinAlarm').onclick = Alarm.izin;
+$('tesAlarm').onclick = Alarm.tes;
+
 $('tanggal').value = tglLokal();
 tampil();
+Alarm.mulai(data);
 setInterval(tampil, 20000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) tampil(); });
