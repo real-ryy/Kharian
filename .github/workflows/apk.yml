@@ -20,10 +20,12 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Siapkan folder www
+      - name: Salin berkas situs ke folder www
         run: |
           mkdir -p www
-          echo '<!DOCTYPE html><meta charset="utf-8"><title>Kharian</title><p>Memuat Kharian...</p>' > www/index.html
+          cp *.html *.css *.js *.png *.json www/
+          rm -f www/package.json www/package-lock.json www/capacitor.config.json
+          sed -i '/serviceWorker/d' www/index.html
 
       - name: Pasang Capacitor dan buat proyek Android
         run: |
