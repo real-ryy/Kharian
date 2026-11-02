@@ -1,9 +1,5 @@
 {
   "appId": "com.kharian.app",
   "appName": "Kharian",
-  "webDir": "www",
-  "server": {
-    "url": "https://real-ryy.github.io/Kharian/",
-    "allowNavigation": ["real-ryy.github.io"]
-  }
+  "webDir": "www"
 }
