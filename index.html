@@ -1,15 +1,22 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0f766e">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kharian">
 <link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192%20(1).png">
 <link rel="stylesheet" href="style.css">
+<style>
+  @media (min-width: 700px) { nav { max-width: 640px; margin: 0 auto; border-left: 1px solid var(--line); border-right: 1px solid var(--line); } }
+</style>
 <title>Kharian</title>
 </head>
 <body>
-<header><h1>Kharian</h1><span id="mode"></span></header>
+<header><h1>Kharian</h1></header>
 <main>
   <section id="catatan" class="screen">
     <div class="box">
@@ -68,9 +75,6 @@
   });
   const chips = document.querySelectorAll('#periode button');
   chips.forEach(c => c.onclick = () => chips.forEach(b => b.setAttribute('aria-pressed', b === c)));
-  document.getElementById('mode').textContent =
-    (window.Capacitor && Capacitor.isNativePlatform && Capacitor.isNativePlatform()) ? 'aplikasi'
-    : matchMedia('(display-mode: standalone)').matches ? 'terpasang' : 'browser';
 </script>
 </body>
 </html>
