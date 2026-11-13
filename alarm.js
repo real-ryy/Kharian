@@ -1,6 +1,7 @@
-// Alarm Kharian: jadwal notifikasi bunyi dan getar lewat Capacitor (hanya di aplikasi Android).
+ // Alarm Kharian: jadwal notifikasi dengan nada alarm dan getar lewat Capacitor (hanya di aplikasi Android).
 const Alarm = (() => {
-  const SALURAN = 'alarm-kharian-1';
+  const SALURAN = 'alarm-kharian-2';
+  const SALURAN_LAMA = 'alarm-kharian-1';
   const ID_TES = 2000000001;
   const cap = window.Capacitor;
   const asli = !!(cap && cap.isNativePlatform && cap.isNativePlatform());
@@ -10,9 +11,10 @@ const Alarm = (() => {
 
   async function siapSaluran() {
     try {
+      try { await LN.deleteChannel({ id: SALURAN_LAMA }); } catch (e) {}
       await LN.createChannel({
-        id: SALURAN, name: 'Alarm Kharian', description: 'Bunyi dan getar saat kegiatan mulai dan selesai',
-        importance: 5, visibility: 1, vibration: true
+        id: SALURAN, name: 'Alarm Kharian', description: 'Nada alarm dan getar saat kegiatan mulai dan selesai',
+        importance: 5, visibility: 1, vibration: true, sound: 'alarm_kharian.wav'
       });
       return true;
     } catch (e) { info('Gagal membuat saluran alarm: ' + pesan(e)); return false; }
@@ -36,10 +38,10 @@ const Alarm = (() => {
     if (!(await izin()) || !(await siapSaluran())) return;
     try {
       await LN.schedule({ notifications: [{
-        id: ID_TES, title: 'Tes alarm Kharian', body: 'Kalau ini berbunyi dan bergetar, alarm Kharian berfungsi.',
+        id: ID_TES, title: 'Tes alarm Kharian', body: 'Kalau Anda mendengar nada alarm dan merasakan getar, alarm Kharian berfungsi.',
         channelId: SALURAN, schedule: { at: new Date(Date.now() + 60000), allowWhileIdle: true }
       }] });
-      info('Tes dijadwalkan. Tutup aplikasi, lalu tunggu 1 menit sampai notifikasi muncul.');
+      info('Tes dijadwalkan. Tutup aplikasi, lalu tunggu 1 menit sampai alarm berbunyi.');
     } catch (e) { info('Gagal menjadwalkan tes: ' + pesan(e)); }
   }
 
